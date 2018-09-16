@@ -43,7 +43,7 @@ class KamigoController < ApplicationController
       http_response_class: http_response.class
     })
   end
-  
+
   def translate_to_korean(message)
     "#{message}油~"
   end
