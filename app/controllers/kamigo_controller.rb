@@ -27,9 +27,10 @@ class KamigoController < ApplicationController
 
     # 傳送訊息
     response = client.reply_message(reply_token, message)
-  	p "======這裡是 response ======"
-    p response 
-    p "============"
+    p '========='
+	p response
+	p response.body
+	p '========='
       
     # 回應 200
     head :ok
