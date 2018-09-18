@@ -4,10 +4,10 @@ class KamigoController < ApplicationController
 
   def webhook
     # 學說話
-    reply_text = learn(received_text)
+    reply_text = learn(channel_id, received_text)
 
     # 關鍵字回覆
-    reply_text = keyword_reply(received_text) if reply_text.nil?
+    reply_text = keyword_reply(channel_id, received_text) if reply_text.nil?
 
     # 推齊
     reply_text = echo2(channel_id, received_text) if reply_text.nil?
@@ -62,11 +62,13 @@ class KamigoController < ApplicationController
   # 學說話
   def learn(received_text)
     #如果開頭不是 卡米狗學說話; 就跳出
-    return nil unless received_text[0..6] == '卡米狗學說話;'
+    return nil unless received_text[0..5] == '肥貓學說話;'
     
-    received_text = received_text[7..-1]
+    received_text = received_text[6..-1]
     semicolon_index = received_text.index(';')
 
+    KeywordMapping.create(channel_id: channel_id, keyword: keyword, message: message)
+    
     # 找不到分號就跳出
     return nil if semicolon_index.nil?
 
@@ -78,7 +80,10 @@ class KamigoController < ApplicationController
   end
 
   # 關鍵字回覆
-  def keyword_reply(received_text)
+  # 關鍵字回覆
+  def keyword_reply(channel_id, received_text)
+    message = KeywordMapping.where(channel_id: channel_id, keyword: received_text).last&.message
+    return message unless message.nil?
     KeywordMapping.where(keyword: received_text).last&.message
   end
 
@@ -103,7 +108,8 @@ class KamigoController < ApplicationController
   def line
     @line ||= Line::Bot::Client.new { |config|
       config.channel_secret = '43c2e6e6fd198d735ffe3e7bf3b29d29'
-      config.channel_token = 'PXXcr+o5uPWHsutFBgDu9Ax/daLc+bnAXylaTnQteEtTgkZY03K85yXMASVdY2pq5PwbIEqUCR1QIBgcqRPvYM4D+FFO4RoaIcBzhDgP0xBn81C0lKuXlX7WPaKhXMA6hQzUMaxfTE+xhDr1RbPCKwdB04t89/1O/w1cDnyilFU='
+      config.channel_token = 'PXXcr+o5uPWHsutFBgDu9Ax/daLc+bnAXylaTnQteEtTgkZY03K85yXMASVdY2pq5PwbIEqUCR1QIBgcqRPvYM4D+FFO4RoaIcBzhDgP0xBn81C0lKuXlX7WPaKhXMA6hQzUMaxfTE+xhDr1RbPCKwdB04t89/1O/w1cDnyilFU=
+'
     }
   end
 
