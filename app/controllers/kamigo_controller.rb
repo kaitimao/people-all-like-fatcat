@@ -67,19 +67,17 @@ class KamigoController < ApplicationController
     received_text = received_text[6..-1]
     semicolon_index = received_text.index(';')
 
-    KeywordMapping.create(channel_id: channel_id, keyword: keyword, message: message)
-    
     # 找不到分號就跳出
     return nil if semicolon_index.nil?
 
     keyword = received_text[0..semicolon_index-1]
     message = received_text[semicolon_index+1..-1]
 
-    KeywordMapping.create(keyword: keyword, message: message)
+    KeywordMapping.create(channel_id: channel_id, keyword: keyword, message: message)
     '好哦～好哦～'
   end
 
-  # 關鍵字回覆
+  
   # 關鍵字回覆
   def keyword_reply(channel_id, received_text)
     message = KeywordMapping.where(channel_id: channel_id, keyword: received_text).last&.message
