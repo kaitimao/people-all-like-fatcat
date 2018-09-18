@@ -3,8 +3,11 @@ class KamigoController < ApplicationController
   protect_from_forgery with: :null_session
 
   def webhook
-    # 設定回覆文字
-    reply_text = keyword_reply(received_text)
+    # 學說話
+    reply_text = learn(received_text)
+
+    # 關鍵字回覆
+    reply_text = keyword_reply(received_text) if reply_text.nil?
 
     # 傳送訊息到 line
     response = reply_to_line(reply_text)
@@ -19,16 +22,27 @@ class KamigoController < ApplicationController
     message['text'] unless message.nil?
   end
 
+  # 學說話
+  def learn(received_text)
+    #如果開頭不是 卡米狗學說話; 就跳出
+    return nil unless received_text[0..6] == '卡米狗學說話;'
+    
+    received_text = received_text[7..-1]
+    semicolon_index = received_text.index(';')
+
+    # 找不到分號就跳出
+    return nil if semicolon_index.nil?
+
+    keyword = received_text[0..semicolon_index-1]
+    message = received_text[semicolon_index+1..-1]
+
+    KeywordMapping.create(keyword: keyword, message: message)
+    '好哦～好哦～'
+  end
+
   # 關鍵字回覆
   def keyword_reply(received_text)
-    # 學習紀錄表
-    keyword_mapping = {
-      'QQ' => '神曲支援：https://www.youtube.com/watch?v=T0LfHEwEXXw&feature=youtu.be&t=1m13s',
-      '我難過' => '神曲支援：https://www.youtube.com/watch?v=T0LfHEwEXXw&feature=youtu.be&t=1m13s'
-    }
-    
-    # 查表
-    keyword_mapping[received_text]
+    KeywordMapping.where(keyword: received_text).last&.message
   end
 
   # 傳送訊息到 line
@@ -51,9 +65,8 @@ class KamigoController < ApplicationController
   # Line Bot API 物件初始化
   def line
     @line ||= Line::Bot::Client.new { |config|
-      config.channel_secret = '43c2e6e6fd198d735ffe3e7bf3b29d29'
-      config.channel_token = 'PXXcr+o5uPWHsutFBgDu9Ax/daLc+bnAXylaTnQteEtTgkZY03K85yXMASVdY2pq5PwbIEqUCR1QIBgcqRPvYM4D+FFO4RoaIcBzhDgP0xBn81C0lKuXlX7WPaKhXMA6hQzUMaxfTE+xhDr1RbPCKwdB04t89/1O/w1cDnyilFU=
-'
+      config.channel_secret = '9160ce4f0be51cc72c3c8a14119f567a'
+      config.channel_token = '2ncMtCFECjdTVmopb/QSD1PhqM6ECR4xEqC9uwIzELIsQb+I4wa/s3pZ4BH8hCWeqfkpVGVig/mIPDsMjVcyVbN/WNeTTw5eHEA7hFhaxPmQSY2Cud51LKPPiXY+nUi+QrXy0d7Hi2YUs65B/tVOpgdB04t89/1O/w1cDnyilFU='
     }
   end
 
@@ -104,5 +117,4 @@ class KamigoController < ApplicationController
   def translate_to_korean(message)
     "#{message}油~"
   end
-
 end
