@@ -8,7 +8,7 @@ class KamigoController < ApplicationController
 
     # 關鍵字回覆
     reply_text = keyword_reply(channel_id, received_text) if reply_text.nil?
-
+    
     # 推齊
     reply_text = echo2(channel_id, received_text) if reply_text.nil?
 
