@@ -15,6 +15,10 @@ group :production do
   gem 'pg', '~> 0.21.0'
 end
 
+#使用devise
+gem 'devise'
+
+
 #line
 gem 'line-bot-api'
 # Use Puma as the app server
