@@ -110,9 +110,9 @@ class KamigoController < ApplicationController
   # Line Bot API 物件初始化
   def line
     @line ||= Line::Bot::Client.new { |config|
-      config.channel_secret = '43c2e6e6fd198d735ffe3e7bf3b29d29'
-      config.channel_token = 'PXXcr+o5uPWHsutFBgDu9Ax/daLc+bnAXylaTnQteEtTgkZY03K85yXMASVdY2pq5PwbIEqUCR1QIBgcqRPvYM4D+FFO4RoaIcBzhDgP0xBn81C0lKuXlX7WPaKhXMA6hQzUMaxfTE+xhDr1RbPCKwdB04t89/1O/w1cDnyilFU='
-    }
+      config.channel_secret = 'a6ea6f35ef9bd167faca807799e7f87e'
+      config.channel_token = 'ftVO1spNJ4fQI8hpiCnnk0dxMLRgxur0yMicrm9lFhZlyoLp8j1sKJQdJpmy8m0uCHqOgXQ8d6bVoymVie4TATtX2FIox+6AlVrCG8KT79LklPiMk0w1BKPY715q9hgALOMszPzTddvNyjKH9pJZNgdB04t89/1O/w1cDnyilFU='
+          }
   end
 
 
