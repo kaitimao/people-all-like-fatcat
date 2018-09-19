@@ -3,6 +3,9 @@ class KamigoController < ApplicationController
   protect_from_forgery with: :null_session
 
   def webhook
+    # 紀錄頻道
+    Channel.find_or_create_by(channel_id: channel_id)
+
     # 學說話
     reply_text = learn(channel_id, received_text)
 
@@ -102,12 +105,13 @@ class KamigoController < ApplicationController
     line.reply_message(reply_token, message)
   end
 
+
+
   # Line Bot API 物件初始化
   def line
     @line ||= Line::Bot::Client.new { |config|
       config.channel_secret = '43c2e6e6fd198d735ffe3e7bf3b29d29'
-      config.channel_token = 'PXXcr+o5uPWHsutFBgDu9Ax/daLc+bnAXylaTnQteEtTgkZY03K85yXMASVdY2pq5PwbIEqUCR1QIBgcqRPvYM4D+FFO4RoaIcBzhDgP0xBn81C0lKuXlX7WPaKhXMA6hQzUMaxfTE+xhDr1RbPCKwdB04t89/1O/w1cDnyilFU=
-'
+      config.channel_token = 'PXXcr+o5uPWHsutFBgDu9Ax/daLc+bnAXylaTnQteEtTgkZY03K85yXMASVdY2pq5PwbIEqUCR1QIBgcqRPvYM4D+FFO4RoaIcBzhDgP0xBn81C0lKuXlX7WPaKhXMA6hQzUMaxfTE+xhDr1RbPCKwdB04t89/1O/w1cDnyilFU='
     }
   end
 
