@@ -44,7 +44,7 @@ class KamigoController < ApplicationController
     response = Net::HTTP.get(uri)
     start_index = response.index('","') + 3
     end_index = response.index('"),') - 1
-    "http://www.cwb.gov.tw" + response[start_index..end_index]
+    "https://www.cwb.gov.tw" + response[start_index..end_index]
   end
 
   def upload_to_imgur(image_url)
