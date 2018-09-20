@@ -52,9 +52,8 @@ class KamigoController < ApplicationController
     start_index = response.index('","') + 3
     end_index = response.index('"),') - 1
     "http://www.cwb.gov.tw" + response[start_index..end_index]
-    p "======這裡是 response & uri======"
+    p "======這裡是 response ======"
     p response 
-    p uri
     p "============"
   end
 
