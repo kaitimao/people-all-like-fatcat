@@ -58,6 +58,41 @@ class KamigoController < ApplicationController
     p "============"
   end
 
+    def upload_to_imgur(image_url)
+    url = URI("https://api.imgur.com/3/image")
+    http = Net::HTTP.new(url.host, url.port)
+    http.use_ssl = true
+    request = Net::HTTP::Post.new(url)
+    request["authorization"] = 'Client-ID 50fdce2319b68a1'
+
+    request.set_form_data({"image" => image_url})
+    response = http.request(request)
+    json = JSON.parse(response.read_body)
+    begin
+      json['data']['link'].gsub("http:","https:")
+    rescue
+      nil
+    end
+  end
+
+    # 傳送圖片到 line
+  def reply_image_to_line(reply_image)
+    return nil if reply_image.nil?
+    
+    # 取得 reply token
+    reply_token = params['events'][0]['replyToken']
+    
+    # 設定回覆訊息
+    message = {
+      type: "image",
+      originalContentUrl: reply_image,
+      previewImageUrl: reply_image
+    }
+
+    # 傳送訊息
+    line.reply_message(reply_token, message)
+  end
+
   # 頻道 ID
   def channel_id
     source = params['events'][0]['source']
