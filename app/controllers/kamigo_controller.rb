@@ -7,6 +7,12 @@ class KamigoController < ApplicationController
     # 查天氣
     reply_image = get_weather(received_text)
 
+    # 有查到的話 後面的事情就不作了
+    unless reply_image.nil?
+  
+    # 傳送訊息到 line
+    response = reply_image_to_line(reply_image)    
+
     # 紀錄頻道
     Channel.find_or_create_by(channel_id: channel_id)
 
@@ -28,6 +34,8 @@ class KamigoController < ApplicationController
 
     # 回應 200
     head :ok
+
+    return
   end 
 
   def get_weather(received_text)
@@ -36,6 +44,18 @@ class KamigoController < ApplicationController
     p received_text 
     p "============"
     upload_to_imgur(get_weather_from_cwb)
+  end
+
+  def get_weather_from_cwb
+    uri = URI('https://www.cwb.gov.tw/V7/js/HDRadar_1000_n_val.js')
+    response = Net::HTTP.get(uri)
+    start_index = response.index('","') + 3
+    end_index = response.index('"),') - 1
+    "http://www.cwb.gov.tw" + response[start_index..end_index]
+    p "======這裡是 response & uri======"
+    p response 
+    p uri
+    p "============"
   end
 
   # 頻道 ID
