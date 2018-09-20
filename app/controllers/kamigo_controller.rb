@@ -3,6 +3,10 @@ class KamigoController < ApplicationController
   protect_from_forgery with: :null_session
 
   def webhook
+
+    # 查天氣
+    reply_image = get_weather(received_text)
+
     # 紀錄頻道
     Channel.find_or_create_by(channel_id: channel_id)
 
@@ -25,6 +29,14 @@ class KamigoController < ApplicationController
     # 回應 200
     head :ok
   end 
+
+  def get_weather(received_text)
+    return nil unless received_text.include? '天氣'
+    p "======這裡是 received_text ======"
+    p received_text 
+    p "============"
+    upload_to_imgur(get_weather_from_cwb)
+  end
 
   # 頻道 ID
   def channel_id
