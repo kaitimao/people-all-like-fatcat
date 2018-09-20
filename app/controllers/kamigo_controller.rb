@@ -32,6 +32,8 @@ class KamigoController < ApplicationController
 
     # 回應 200
     head :ok
+
+    return
   end 
 
   def get_weather(received_text)
@@ -64,7 +66,7 @@ class KamigoController < ApplicationController
     end
   end  
 
-# 傳送圖片到 line
+  # 傳送圖片到 line
   def reply_image_to_line(reply_image)
     return nil if reply_image.nil?
     
@@ -218,5 +220,4 @@ class KamigoController < ApplicationController
   def translate_to_korean(message)
     "#{message}油~"
   end
-
 end
