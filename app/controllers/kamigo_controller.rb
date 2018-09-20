@@ -40,7 +40,7 @@ class KamigoController < ApplicationController
   end
 
   def get_weather_from_cwb
-    uri = URI('http://www.cwb.gov.tw/V7/js/HDRadar_1000_n_val.js')
+    uri = URI('https://www.cwb.gov.tw/V7/js/HDRadar_1000_n_val.js')
     response = Net::HTTP.get(uri)
     start_index = response.index('","') + 3
     end_index = response.index('"),') - 1
