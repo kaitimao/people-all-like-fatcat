@@ -4,7 +4,7 @@ class KamigoController < ApplicationController
 
   def webhook
 
-# 查天氣
+    # 查天氣
     reply_image = get_weather(received_text)
 
     # 有查到的話 後面的事情就不作了
@@ -16,7 +16,8 @@ class KamigoController < ApplicationController
       head :ok
 
       return 
-
+    end
+    
     # 紀錄頻道
     Channel.find_or_create_by(channel_id: channel_id)
 
