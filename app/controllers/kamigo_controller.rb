@@ -38,11 +38,6 @@ class KamigoController < ApplicationController
     return
   end 
 
-  def index
-    @post = Post.all
-    binding.pry
-  end 
-
   def get_weather(received_text)
     return nil unless received_text.include? '天氣'
     p "======這裡是 received_text ======"
