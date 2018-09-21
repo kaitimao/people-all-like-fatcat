@@ -38,6 +38,11 @@ class KamigoController < ApplicationController
     return
   end 
 
+  def index
+    @post = Post.all
+    binding.pry
+  end 
+
   def get_weather(received_text)
     return nil unless received_text.include? '天氣'
     p "======這裡是 received_text ======"
@@ -51,18 +56,22 @@ class KamigoController < ApplicationController
     response = Net::HTTP.get(uri)
     start_index = response.index('","') + 3
     end_index = response.index('"),') - 1
-    "http://www.cwb.gov.tw" + response[start_index..end_index]
-    p "======這裡是 response ======"
-    p response 
+    "https://www.cwb.gov.tw" + response[start_index..end_index]
+
+    p "======這裡是 start_index ======"
+    p start_index 
+    p "============"
+    p "======這裡是 end_index ======"
+    p end_index 
     p "============"
   end
 
-    def upload_to_imgur(image_url)
+  def upload_to_imgur(image_url)
     url = URI("https://api.imgur.com/3/image")
     http = Net::HTTP.new(url.host, url.port)
     http.use_ssl = true
     request = Net::HTTP::Post.new(url)
-    request["authorization"] = 'Client-ID 50fdce2319b68a1'
+    request["authorization"] = 'Client-ID be2d83405627ab8'
 
     request.set_form_data({"image" => image_url})
     response = http.request(request)
