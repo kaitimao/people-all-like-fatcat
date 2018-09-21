@@ -11,7 +11,9 @@ class KamigoController < ApplicationController
     unless reply_image.nil?
   
     # 傳送訊息到 line
-    response = reply_image_to_line(reply_image)    
+    response = reply_image_to_line(reply_image)  
+
+    return  
 
     # 紀錄頻道
     Channel.find_or_create_by(channel_id: channel_id)
@@ -35,7 +37,7 @@ class KamigoController < ApplicationController
     # 回應 200
     head :ok
 
-    return
+    
   end 
 
   def get_weather(received_text)
